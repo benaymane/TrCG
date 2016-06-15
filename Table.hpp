@@ -10,7 +10,8 @@ private:
 
 public:
 	Table( Container* );
-	
+	void addCard( Card* newCard );
+
 	//getters
 	int getValueAllowed( ) const;
 	char getSymbolAllowed( ) const;
@@ -20,6 +21,7 @@ public:
 	void setSymbolAllowed( const char& );
 
 	void print( ) const;
+	bool empty( ) const;
 private:
 	bool checkValidity( ) const;
 };

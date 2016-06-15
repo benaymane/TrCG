@@ -3,11 +3,14 @@
 #include "Deck.hpp"
 #include "Hand.hpp"
 #include "Table.hpp"
-
+#include "Game.hpp"
 using namespace std;
 
 int main( int argc, char* argv[] ) {
 
+	Game myGame;
+	myGame.launch( );
+	/*
 	cout << "Making a deck" << endl;
 	Container* deck = new Deck( );
 	deck->print( );
@@ -25,7 +28,7 @@ int main( int argc, char* argv[] ) {
 
 	cout << "Showing next in deck" << endl;
 	deck->print( );
-
+	*/
 	system( "pause" );
 	return 0;
 }

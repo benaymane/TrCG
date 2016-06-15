@@ -7,6 +7,7 @@ class Deck : public Container {
 public:
 	Deck( );
 
+	bool empty( ) const;
 	void shuffle( );
 	void print( ) const;
 };

@@ -5,6 +5,7 @@ Table::Table( Container* deck ) {
 		this->addCard( deck->removeCard( ) );
 
 		if ( checkValidity( ) ) {
+			std::cout << "IN";
 			valueAllowed = Cards[0]->getValue( );
 			symbolAllowed = Cards[0]->getSymbol( );
 			break;
@@ -12,6 +13,12 @@ Table::Table( Container* deck ) {
 
 		deck->addCard( removeCard( ) );
 	}
+}
+void Table::addCard( Card* newCard ) {
+	Container::addCard( newCard );
+	//Cards.push_back( newCard );
+	valueAllowed = newCard->getValue( );
+	symbolAllowed = newCard->getSymbol( );
 }
 
 int Table::getValueAllowed( ) const {
@@ -47,4 +54,10 @@ bool Table::checkValidity( ) const {
 		default:
 			return true;
 	}
+}
+
+bool Table::empty( ) const{
+	if ( Cards.size( ) <= 1 )
+		return true;
+	return false;
 }

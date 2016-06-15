@@ -17,17 +17,21 @@ public:
 	Container( const int& );
 
 	//Container functionality
-	void addCard( Card* );
+	virtual void addCard( Card* );
 	Card* removeCard( int = -1);
-	Card* getCard( const int& );
+	Card* getCard( int = -1 );
+	virtual bool empty( );
 
 	virtual void print( ) const;
 	virtual void shuffle( ) {};
 
-	virtual int getAllowedValue( ) const { return -1; };
-	virtual char getAllowedSymbol( ) const { return 0xA; };
+	virtual int getValueAllowed( ) const { return -1; };
+	virtual char getSymbolAllowed( ) const { return 0xA; };
 	virtual void setAllowedValue( ) {};
 	virtual void setAllowedSymbol( ) {};
+
+	//this is temporary for non-inteligent computer
+	virtual std::vector<Card*> getCards( ) { return Cards; }
 private:
 	int lastCardIndex( );
 };

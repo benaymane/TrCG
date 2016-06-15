@@ -29,9 +29,9 @@ Card* Container::removeCard( int index ) {
 	return cardSave;
 }
 
-Card* Container::getCard( const int& index ) {
-	if ( index >= Cards.size( ) )
-		return NULL;
+Card* Container::getCard( int index ) {
+	if ( index == -1 )
+		return Cards[ Cards.size( ) - 1 ];
 
 	return Cards[ index ];
 }
@@ -47,6 +47,10 @@ void Container::print( ) const {
 		card->print( );
 
 	std::cout << " ]\n";
+}
+
+bool Container::empty( ) {
+	return Cards.empty( );
 }
 
 //protected
