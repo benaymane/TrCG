@@ -17,8 +17,8 @@ public:
 	char getSymbolAllowed( ) const;
 
 	//setter
-	void setValueAllowed( const int& );
-	void setSymbolAllowed( const char& );
+	void setValueAllowed( int );
+	void setSymbolAllowed( char );
 
 	void print( ) const;
 	bool empty( ) const;

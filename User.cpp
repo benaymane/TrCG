@@ -4,17 +4,14 @@ User::User( Container* deck ): Players( "User", deck ) {
 
 };
 
-Card* User::pickCard( int& choice ) {
+int User::pickCard( ) {
+	int choice = -1;
 	//assuming no out of bound
 	hand->print( );
 	std::cout << "\nPick a card or 0 to go back: ";
 	std::cin >> choice;
 
-	if ( choice == 0 )
-		return NULL;
-
-	return hand->getCard( --choice );
-
+	return choice;
 }
 
 Card* User::peekCard( int index ) {

@@ -20,7 +20,7 @@ public:
 	Game( );
 
 	void launch( );
-	void userPickMediator( int& );
+	bool userPickMediator( int& );
 
 private:
 	void menu( );
@@ -29,4 +29,7 @@ private:
 	bool checkWon( );
 	void switchTurns( );
 	void fillDeck( );
+	void checkSpecialCase( Card* );
+	void promptSuiteChange( );
+	void symbolChangeMenu( );
 };

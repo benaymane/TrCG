@@ -15,10 +15,12 @@ Table::Table( Container* deck ) {
 	}
 }
 void Table::addCard( Card* newCard ) {
-	Container::addCard( newCard );
-	//Cards.push_back( newCard );
+	//Container::addCard( newCard );
+	Cards.push_back( newCard );
 	valueAllowed = newCard->getValue( );
 	symbolAllowed = newCard->getSymbol( );
+	//std::cout << "added to table: " << newCard->getValue( )
+		//<< " New value is: " << valueAllowed << std::endl;
 }
 
 int Table::getValueAllowed( ) const {
@@ -29,18 +31,20 @@ char Table::getSymbolAllowed( ) const {
 	return symbolAllowed;
 }
 
-void Table::setValueAllowed( const int& value ) {
+void Table::setValueAllowed( int value ) {
 	valueAllowed = value;
 }
 
-void Table::setSymbolAllowed( const char& symbol ) {
+void Table::setSymbolAllowed( char symbol ) {
 	symbolAllowed = symbol;
 }
 
 void Table::print( ) const {
-	std::cout << "[ ";
-	Cards[ Cards.size( ) - 1 ]->print( );
-	std::cout << " ]\n";
+	std::cout << "[ ( "
+		<< Cards[ Cards.size( ) - 1 ]->getValue( )
+		<< ", "
+		<< symbolAllowed
+		<< " ) ]\n";
 }
 
 bool Table::checkValidity( ) const {

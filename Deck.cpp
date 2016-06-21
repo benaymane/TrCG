@@ -25,7 +25,7 @@ Deck::Deck( ) : Container( INIT_DECK_SIZE ) {
 }
 
 void Deck::shuffle( ) {
-
+	srand( time( 0 ) );
 	for ( int i = 0; i < SHUFFLE_LOOP; i++ )
 		for ( int j = 0; j < INIT_DECK_SIZE; j++ )
 			this->swapCard( j, rand( ) % 40 );

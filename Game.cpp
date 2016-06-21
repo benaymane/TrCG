@@ -23,8 +23,8 @@ void Game::launch( ) {
 
 				switch ( choice ) {
 				case 1:
-					userPickMediator( choice );
-					switchTurns( );
+					if( userPickMediator( choice ) )
+						switchTurns( );
 					break;
 				case 2:
 					user->drawCard( deck );
@@ -38,9 +38,18 @@ void Game::launch( ) {
 		}
 		else {
 			std::cout << "Computer turn...\n";
-			if ( !comp->pickCard( choice, table ) ) {
+			Card* compPick;
+			if ( ( compPick = comp->pickCard( choice, table ) ) == NULL) {
 				std::cout << "Computer drew a card...\n";
 				comp->drawCard( deck );
+			}
+			else {
+				checkSpecialCase( compPick );
+				comp->removeCard( compPick );
+				std::cout << "Computer played: "; 
+				compPick->print( );
+				std::cout << std::endl;
+				table->addCard( compPick );
 			}
 			switchTurns( );
 		}
@@ -71,29 +80,103 @@ void Game::promptUser( int& choice ) {
 	}
 }
 
-void Game::userPickMediator( int& choice ) {
+bool Game::userPickMediator( int& choice ) {
 	int cardIdx = -1;
 	while ( true ) {
-		if ( user->pickCard( cardIdx ) == NULL ) {
+		if ( ( cardIdx = user->pickCard( ) ) == 0 ) {
 			choice = -1;
-			break;
+			return false;
 		}
 
-		if ( checkCard( user->peekCard( cardIdx ) ) ) {
-			table->addCard( user->playCard( cardIdx ) );
-			break;
+		if ( checkCard( user->peekCard( cardIdx - 1) ) ) {
+			checkSpecialCase( user->peekCard( cardIdx - 1) );
+			//std::cout << "adding: " << user->peekCard( cardIdx - 1 )->getValue( ) << std::endl;
+			table->addCard( user->playCard( cardIdx - 1) );
+			return true;
 		}
 	}
 	
 }
 
+void Game::checkSpecialCase( Card* futureCard ) {
+	switch ( futureCard->getValue( ) ) {
+	case 1:
+		if ( turn == user_turn )
+			std::cout << "You played an ACE, computer will skip its turn!\n";
+		else
+			std::cout << "Computer played an ACE, you will skip your turn!\n";
+		switchTurns( );
+		break;
+	case 7:
+		promptSuiteChange( );
+		break;
+	case 2:
+		break;
+	default:
+		std::cout << "nada\n";
+		break;
+	}
+}
+
+void Game::promptSuiteChange( ) {
+	if ( turn == user_turn ) {
+		int choice;
+		symbolChangeMenu( );
+		std::cin >> choice;
+		while ( true ) {
+			if ( choice == 0 )
+				break;
+			else if ( choice == 1 ) {
+				table->setSymbolAllowed( SYMBOL_CONCH );
+				break;
+			}
+
+			else if ( choice == 2 ) {
+				table->setSymbolAllowed( SYMBOL_CROWN );
+				break;
+			}
+
+			else if ( choice == 3 ) {
+				table->setSymbolAllowed( SYMBOL_STAR );
+				break;
+			}
+
+			else if ( choice == 4 ) {
+				table->setSymbolAllowed( SYMBOL_TRIDENT );
+				break;
+			}
+		}
+	}
+	else {
+		std::cout << "Computer has played a 7!\n";
+		char symbol = comp->getBestSymbol( );
+		if ( symbol != table->getSymbolAllowed( ) )
+			std::cout << "The symbol of the cards has changed!\n";
+		else
+			std::cout << "The symbol of the cards remains unchanged!\n";
+		table->setSymbolAllowed( symbol );
+	}
+}
+
+void Game::symbolChangeMenu( ) {
+	std::cout << "Please pick the symbol you want to keep\n"
+		<< "==============="
+		<< "= 1. CONCH    ="
+		<< "= 2. CROWN    ="
+		<< "= 3. STAR     ="
+		<< "= 4. TRIDENT  ="
+		<< "==============="
+		<< "Choose 0 to keep as is: ";
+}
+
 bool Game::checkCard( Card* futureCard ) {
 	if ( futureCard->getSymbol( ) == table->getSymbolAllowed( ) ||
-		futureCard->getValue( ) == table->getValueAllowed( ) )
+	  futureCard->getValue( ) == table->getValueAllowed( ) )
 		return true;
-
-	std::cout << "table = " << table->getSymbolAllowed() << " and " << table->getValueAllowed() << std::endl;
-	std::cout << "card = " << futureCard->getSymbol( ) << " and " << futureCard->getValue( ) << std::endl;
+	
+	std::cout << "You can't place that card!!\n";
+	//std::cout << "table = " << table->getSymbolAllowed() << " and " << table->getValueAllowed() << std::endl;
+	//std::cout << "card = " << futureCard->getSymbol( ) << " and " << futureCard->getValue( ) << std::endl;
 	return false;
 }
 
@@ -114,7 +197,7 @@ bool Game::checkWon( ) {
 	return false;
 }
 
-void Game::switchTurns( ) {
+void Game::switchTurns( ) {	
 	if ( turn == user_turn )
 		turn = computer_turn;
 	else

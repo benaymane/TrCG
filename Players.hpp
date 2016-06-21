@@ -18,7 +18,7 @@ public:
 	virtual void drawCard( Container* deck );
 	virtual Card* playCard( int );
 	
-	virtual Card* pickCard( int& ) = 0;
+	virtual int pickCard( void ) = 0;
 
 	virtual ~Players() {
 		delete hand;
